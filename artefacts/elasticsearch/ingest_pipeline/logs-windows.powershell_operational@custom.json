@@ -1,0 +1,68 @@
+{
+  "processors": [
+    {
+      "remove": {
+        "ignore_missing": true,
+        "field": "message",
+        "if": "ctx.powershell?.file?.script_block_hash!= null && ctx.fields?.duplicated!= null && (ctx.fields?.duplicated == true || ctx.fields?.duplicated == 'true')"
+      }
+    },
+    {
+      "remove": {
+        "ignore_missing": true,
+        "field": "powershell.file.script_block_text",
+        "if": "ctx.powershell?.file?.script_block_hash!= null && ctx.fields?.duplicated!= null && (ctx.fields?.duplicated == true || ctx.fields?.duplicated == 'true')"
+      }
+    },
+    {
+      "script": {
+        "if": "ctx.host?.os?.type != null",
+        "source": "ctx._temp = ctx._temp != null ? ctx._temp : new HashMap(); \nif (ctx.host?.os?.type != null) {  \nctx._temp.os_type = ctx.host.os.type;  \nctx.remove('host');  \nctx.host = [:]; ctx.host.os = [:];  \nctx.host.os.type = ctx._temp.os_type;\nctx.remove('_temp');  \n} "
+      }
+    },
+    {
+      "script": {
+        "if": "ctx.user?.id != null",
+        "source": "if (ctx.user instanceof Map) {\ndef userFieldsToKeep = ['id']; ctx.user.keySet().removeIf(key -> !userFieldsToKeep.contains(key));\n}"
+      }
+    },
+    {
+      "script": {
+        "if": "ctx.file?.name != null || ctx.file?.path != null || ctx.file?.directory != null",
+        "source": "if (ctx.file instanceof Map) {\ndef fileFieldsToKeep = ['name', 'path', 'directory']; ctx.file.keySet().removeIf(key -> !fileFieldsToKeep.contains(key));\n}"
+      }
+    },
+    {
+      "remove": {
+        "ignore_missing": true,
+        "field": [
+          "winlog",
+          "log",
+          "agent",
+          "powershell.sequence",
+          "powershell.total",
+          "cloud",
+          "elastic_agent",
+          "data_stream",
+          "message",
+          "_temp",
+          "powershell.file.script_block_id"
+        ],
+        "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction')"
+      }
+    },
+    {
+      "script": {
+        "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && ctx.powershell?.file?.script_block_hash!= null",
+        "source": "ctx._id = ctx.powershell.file.script_block_hash"
+      }
+    },
+    {
+      "remove": {
+        "ignore_missing": true,
+        "field": "fields.duplicated",
+        "if": "ctx.fields?.duplicated!= null"
+      }
+    }
+  ]
+}

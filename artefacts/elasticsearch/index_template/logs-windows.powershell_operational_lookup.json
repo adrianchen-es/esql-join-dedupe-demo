@@ -1,0 +1,27 @@
+{
+  "index_patterns": [
+    "logs-windows.powershell_operational_lookup-*"
+  ],
+  "template": {
+    "settings": {
+      "index": {
+        "mode": "lookup"
+      }
+    }
+  },
+  "composed_of": [
+    "logs@mappings",
+    "logs@settings",
+    "logs-windows.powershell_operational_lookup@package",
+    "logs@custom",
+    "ecs@mappings",
+    ".fleet_globals-1",
+    ".fleet_agent_id_verification-1",
+    "logs-windows.powershell_operational@custom"
+  ],
+  "priority": 300,
+  "ignore_missing_component_templates": [
+    "logs@custom",
+    "logs-windows.powershell_operational@custom"
+  ]
+}
