@@ -46,6 +46,7 @@
           "data_stream",
           "message",
           "_temp",
+          "input",
           "powershell.file.script_block_id"
         ],
         "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction')"
