@@ -1,0 +1,29 @@
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "min_age": "0ms",
+        "actions": {
+          "rollover": {
+            "min_primary_shard_size": "1gb",
+            "max_age": "90d",
+            "max_docs": 200000000,
+            "max_primary_shard_size": "30gb"
+          },
+          "set_priority": {
+            "priority": 100
+          }
+        }
+      },
+      "delete": {
+        "min_age": "30d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    },
+    "_meta": {
+      "description": "sample policy for the logs-windows.powershell_operational_lookup index template"
+    }
+  }
+}
