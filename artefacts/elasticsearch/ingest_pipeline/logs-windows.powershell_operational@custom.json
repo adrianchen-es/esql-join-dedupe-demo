@@ -16,19 +16,19 @@
     },
     {
       "script": {
-        "if": "ctx.host?.os?.type != null",
+        "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && (ctx.host?.os?.type != null)",
         "source": "ctx._temp = ctx._temp != null ? ctx._temp : new HashMap(); \nif (ctx.host?.os?.type != null) {  \nctx._temp.os_type = ctx.host.os.type;  \nctx.remove('host');  \nctx.host = [:]; ctx.host.os = [:];  \nctx.host.os.type = ctx._temp.os_type;\nctx.remove('_temp');  \n} "
       }
     },
     {
       "script": {
-        "if": "ctx.user?.id != null",
+        "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && (ctx.user?.id != null)",
         "source": "if (ctx.user instanceof Map) {\ndef userFieldsToKeep = ['id']; ctx.user.keySet().removeIf(key -> !userFieldsToKeep.contains(key));\n}"
       }
     },
     {
       "script": {
-        "if": "ctx.file?.name != null || ctx.file?.path != null || ctx.file?.directory != null",
+        "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && (ctx.file?.name != null || ctx.file?.path != null || ctx.file?.directory != null)",
         "source": "if (ctx.file instanceof Map) {\ndef fileFieldsToKeep = ['name', 'path', 'directory']; ctx.file.keySet().removeIf(key -> !fileFieldsToKeep.contains(key));\n}"
       }
     },
