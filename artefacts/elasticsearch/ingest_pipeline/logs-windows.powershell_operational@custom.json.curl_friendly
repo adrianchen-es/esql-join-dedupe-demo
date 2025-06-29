@@ -19,35 +19,21 @@
     {
       "script": {
         "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && (ctx.host?.os?.type != null)",
-        "source": """
-ctx._temp = ctx._temp != null ? ctx._temp : new HashMap(); 
-if (ctx.host?.os?.type != null) {  
-ctx._temp.os_type = ctx.host.os.type;  
-ctx.remove('host');  
-ctx.host = [:]; ctx.host.os = [:];  
-ctx.host.os.type = ctx._temp.os_type;
-ctx.remove('_temp');  
-} """,
+        "source": "ctx._temp = ctx._temp != null ? ctx._temp : new HashMap(); \nif (ctx.host?.os?.type != null) {  \nctx._temp.os_type = ctx.host.os.type;  \nctx.remove('host');  \nctx.host = [:]; ctx.host.os = [:];  \nctx.host.os.type = ctx._temp.os_type;\nctx.remove('_temp');  \n} ",
         "description": "Example 1 to retain a field for the lookup index - host.os.type"
       }
     },
     {
       "script": {
         "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && (ctx.user?.id != null)",
-        "source": """
-if (ctx.user instanceof Map) {
-def userFieldsToKeep = ['id']; ctx.user.keySet().removeIf(key -> !userFieldsToKeep.contains(key));
-}""",
+        "source": "if (ctx.user instanceof Map) {\ndef userFieldsToKeep = ['id']; ctx.user.keySet().removeIf(key -> !userFieldsToKeep.contains(key));\n}",
         "description": "Example 2 to retain a field for the lookup index - user.id"
       }
     },
     {
       "script": {
         "if": "ctx.tags!= null && ctx.tags.contains('powershell_scriptblock_reduction') && (ctx.file?.name != null || ctx.file?.path != null || ctx.file?.directory != null)",
-        "source": """
-if (ctx.file instanceof Map) {
-def fileFieldsToKeep = ['name', 'path', 'directory']; ctx.file.keySet().removeIf(key -> !fileFieldsToKeep.contains(key));
-}""",
+        "source": "if (ctx.file instanceof Map) {\ndef fileFieldsToKeep = ['name', 'path', 'directory']; ctx.file.keySet().removeIf(key -> !fileFieldsToKeep.contains(key));\n}",
         "description": "Retain field for the lookup index - file.name, file,path, file.directory"
       }
     },
